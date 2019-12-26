@@ -5,6 +5,7 @@ import kaptainwutax.seedcracker.cracker.*;
 import kaptainwutax.seedcracker.cracker.population.PopulationData;
 import kaptainwutax.seedcracker.finder.FinderQueue;
 import kaptainwutax.seedcracker.render.RenderQueue;
+import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedcracker.util.Rand;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +31,6 @@ import java.util.Random;
 
 public class SeedCracker implements ModInitializer {
 
-	public static final Logger LOG = LogManager.getLogger("Seed Cracker");
     private static final SeedCracker INSTANCE = new SeedCracker();
 
     public List<Long> worldSeeds = null;
@@ -102,19 +102,19 @@ public class SeedCracker implements ModInitializer {
 		this.pillarSeeds = null;
 		this.structureCache.clear();
 		this.biomeCache.clear();
-		this.populationCache.clear();
+		this.decoratorCache.clear();
 	}
 
 	public synchronized boolean onPillarData(PillarData pillarData) {
 		if(pillarData != null && (this.pillarSeeds == null || this.pillarSeeds.isEmpty())) {
-			LOG.warn("Looking for pillar seeds...");
+			Log.warn("Looking for pillar seeds...");
 
 			this.pillarSeeds = pillarData.getPillarSeeds();
 
 			if(this.pillarSeeds.size() > 0) {
-				LOG.warn("Finished search with " + this.pillarSeeds + (this.pillarSeeds.size() == 1 ? " seed." : " seeds."));
+				Log.warn("Finished search with " + this.pillarSeeds + (this.pillarSeeds.size() == 1 ? " seed." : " seeds."));
 			} else {
-				LOG.error("Finished search with no seeds.");
+				Log.error("Finished search with no seeds.");
 			}
 
 			this.onStructureData(null);
@@ -138,17 +138,17 @@ public class SeedCracker implements ModInitializer {
 			LOG.warn("Looking for structure seeds with " + this.populationCache.size() + " population features.");
 
 			this.pillarSeeds.forEach(pillarSeed -> {
-				timeMachine.buildStructureSeeds(pillarSeed, this.structureCache, this.populationCache, this.structureSeeds);
+				timeMachine.buildStructureSeeds(pillarSeed, this.structureCache, this.decoratorCache, this.structureSeeds);
 			});
 
 			if(this.structureSeeds.size() > 0) {
 				LOG.warn("Finished search with " + this.structureSeeds.size() + (this.structureSeeds.size() == 1 ? " seed." : " seeds."));
 			} else {
-				LOG.error("Finished search with no seeds.");
+				Log.error("Finished search with no seeds.");
 			}
 
 			this.structureCache.clear();
-			this.onPopulationData(null);
+			this.onDecoratorData(null);
 			this.onBiomeData(null);
 		} else if(this.structureSeeds != null && structureData != null) {
 			this.structureSeeds.removeIf(structureSeed -> {
@@ -183,9 +183,9 @@ public class SeedCracker implements ModInitializer {
 			added = true;
 		}
 
-		if(this.worldSeeds == null && this.structureSeeds != null && this.biomeCache.size() >= 6) {
+		if(this.worldSeeds == null && this.structureSeeds != null && this.biomeCache.size() >= 5) {
 			this.worldSeeds = new ArrayList<>();
-			LOG.warn("Looking for world seeds with " + this.biomeCache.size() + " biomes.");
+			Log.warn("Looking for world seeds with " + this.biomeCache.size() + " biomes.");
 
 			for(int i = 0; i < this.structureSeeds.size(); i++) {
 				SeedCracker.LOG.warn("Progress " + (i * 100.0f) / this.structureSeeds.size() + "%...");
@@ -212,9 +212,9 @@ public class SeedCracker implements ModInitializer {
 			}
 
 			if(this.worldSeeds.size() > 0) {
-				LOG.warn("Finished search with " + this.worldSeeds + (this.worldSeeds.size() == 1 ? " seed." : " seeds."));
+				Log.warn("Finished search with " + this.worldSeeds + (this.worldSeeds.size() == 1 ? " seed." : " seeds."));
 			} else {
-				LOG.error("Finished search with no seeds.");
+				Log.error("Finished search with no seeds.");
 			}
 		} else if(this.worldSeeds != null && biomeData != null) {
 			this.worldSeeds.removeIf(worldSeed -> {
