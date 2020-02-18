@@ -2,6 +2,7 @@ package kaptainwutax.seedcracker.cracker;
 
 import kaptainwutax.seedcracker.SeedCracker;
 import kaptainwutax.seedcracker.cracker.population.PopulationData;
+import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedcracker.util.Rand;
 import kaptainwutax.seedcracker.util.math.LCG;
 import net.minecraft.world.gen.ChunkRandom;
@@ -21,7 +22,7 @@ public class TimeMachine {
 
         for(long i = 0; i < (1L << 32); i++) {
             if((i & ((1L << 28) - 1)) == 0) {
-                SeedCracker.LOG.warn("Progress " + (i * 100.0f) / (1L << 32) + "%...");
+                Log.warn("Progress " + (i * 100.0f) / (1L << 32) + "%...");
             }
 
             long structureSeed = this.timeMachine(i, pillarSeed);
