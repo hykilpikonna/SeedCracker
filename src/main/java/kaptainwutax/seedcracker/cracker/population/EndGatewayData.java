@@ -6,7 +6,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.decorator.Decorator;
 
-public class EndGatewayData extends PopulationData {
+public class EndGatewayData extends DecoratorData {
 
     private int xOffset;
     private int zOffset;
@@ -20,9 +20,7 @@ public class EndGatewayData extends PopulationData {
     }
 
     @Override
-    public boolean testDecorator(long decoratorSeed) {
-        Rand rand = new Rand(decoratorSeed, false);
-
+    public boolean testDecorator(Rand rand) {
         if(rand.nextInt(700) != 0)return false;
         if(rand.nextInt(16) != this.xOffset)return false;
         if(rand.nextInt(16) != this.zOffset)return false;

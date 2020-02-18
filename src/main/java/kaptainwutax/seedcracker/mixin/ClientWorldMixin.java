@@ -1,14 +1,15 @@
 package kaptainwutax.seedcracker.mixin;
 
-import kaptainwutax.seedcracker.finder.FinderQueue;
 import kaptainwutax.seedcracker.SeedCracker;
+import kaptainwutax.seedcracker.finder.FinderQueue;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.concurrent.Executors;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
@@ -17,8 +18,11 @@ public abstract class ClientWorldMixin {
     private void disconnect(CallbackInfo ci) {
         SeedCracker.get().clear();
         FinderQueue.get().clear();
-        FinderQueue.SERVICE.shutdown();
-        FinderQueue.SERVICE = Executors.newFixedThreadPool(5);
+    }
+
+    @Inject(method = "getGeneratorStoredBiome", at = @At("HEAD"), cancellable = true)
+    private void getGeneratorStoredBiome(int x, int y, int z, CallbackInfoReturnable<Biome> ci) {
+        ci.setReturnValue(Biomes.THE_VOID);
     }
 
 }

@@ -21,6 +21,8 @@ import java.util.List;
 public class EmeraldOreFinder extends BlockFinder {
 
     protected static List<BlockPos> SEARCH_POSITIONS = Finder.buildSearchPositions(Finder.CHUNK_POSITIONS, pos -> {
+        if(pos.getY() < 4)return true;
+        if(pos.getY() > 28 + 4)return true;
         return false;
     });
 
@@ -39,7 +41,7 @@ public class EmeraldOreFinder extends BlockFinder {
 
         List<BlockPos> result = super.findInChunk();
 
-        if(!result.isEmpty() && SeedCracker.get().onPopulationData(new EmeraldOreData(this.chunkPos, biome, result))) {
+        if(!result.isEmpty() && SeedCracker.get().onDecoratorData(new EmeraldOreData(this.chunkPos, biome, result))) {
             result.forEach(pos -> {
                 this.renderers.add(new Cube(pos, new Vector4f(0.0f, 1.0f, 0.0f, 1.0f)));
             });
