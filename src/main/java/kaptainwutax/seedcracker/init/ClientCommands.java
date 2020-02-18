@@ -5,6 +5,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import kaptainwutax.seedcracker.command.ClientCommand;
 import kaptainwutax.seedcracker.command.FinderCommand;
+import kaptainwutax.seedcracker.command.GuiCommand;
 import kaptainwutax.seedcracker.command.RenderCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -23,10 +24,12 @@ public class ClientCommands {
 
     public static RenderCommand RENDER;
     public static FinderCommand FINDER;
+    public static GuiCommand GUI;
 
     static {
         COMMANDS.add(RENDER = new RenderCommand());
         COMMANDS.add(FINDER = new FinderCommand());
+        COMMANDS.add(GUI = new GuiCommand());
     }
 
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {

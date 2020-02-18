@@ -2,18 +2,25 @@ package kaptainwutax.seedcracker;
 
 import kaptainwutax.seedcracker.cracker.storage.DataStorage;
 import kaptainwutax.seedcracker.finder.FinderQueue;
+import kaptainwutax.seedcracker.gui.GuiItem;
 import kaptainwutax.seedcracker.render.RenderQueue;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.registry.Registry;
 
 public class SeedCracker implements ModInitializer {
 
     private static final SeedCracker INSTANCE = new SeedCracker();
     private DataStorage dataStorage = new DataStorage();
-
+	public static Item GUI_ITEM=new GuiItem(new Item.Settings().group(ItemGroup.MISC).rarity(Rarity.EPIC));
 	@Override
 	public void onInitialize() {
 		RenderQueue.get().add("hand", FinderQueue.get()::renderFinders);
 
+		Registry.register(Registry.ITEM,new Identifier("seedcracker","gui_item"),GUI_ITEM);
 		/*
 		long ss = 5718603440394L;
 		LCG lcg = Rand.JAVA_LCG.combine(-5);
