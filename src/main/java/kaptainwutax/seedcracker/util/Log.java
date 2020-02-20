@@ -1,13 +1,9 @@
 package kaptainwutax.seedcracker.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.TextComponentUtil;
-import net.minecraft.text.Texts;
+import net.minecraft.client.util.TextFormat;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
-
-import static net.minecraft.util.Formatting.RED;
-import static net.minecraft.util.Formatting.YELLOW;
 
 public class Log {
 
@@ -23,7 +19,7 @@ public class Log {
         PlayerEntity player = getPlayer();
 
         if(player != null) {
-            player.addChatMessage(new LiteralText(YELLOW + message), false);
+            player.addChatMessage(new LiteralText(TextFormat.YELLOW + message), false);
         }
     }
 
@@ -31,7 +27,7 @@ public class Log {
         PlayerEntity player = getPlayer();
 
         if(player != null) {
-            player.addChatMessage(new LiteralText(RED + message), false);
+            player.addChatMessage(new LiteralText(TextFormat.RED + message), false);
         }
     }
 
