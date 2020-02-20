@@ -102,7 +102,7 @@ public class SeedCracker implements ModInitializer {
 		this.pillarSeeds = null;
 		this.structureCache.clear();
 		this.biomeCache.clear();
-		this.decoratorCache.clear();
+		this.populationCache.clear();
 	}
 
 	public synchronized boolean onPillarData(PillarData pillarData) {
@@ -134,21 +134,21 @@ public class SeedCracker implements ModInitializer {
 
 		if(this.structureSeeds == null && this.pillarSeeds != null && this.structureCache.size() + this.populationCache.size() >= 5) {
 			this.structureSeeds = new ArrayList<>();
-			LOG.warn("Looking for structure seeds with " + this.structureCache.size() + " structure features.");
-			LOG.warn("Looking for structure seeds with " + this.populationCache.size() + " population features.");
+			Log.warn("Looking for structure seeds with " + this.structureCache.size() + " structure features.");
+			Log.warn("Looking for structure seeds with " + this.populationCache.size() + " population features.");
 
 			this.pillarSeeds.forEach(pillarSeed -> {
-				timeMachine.buildStructureSeeds(pillarSeed, this.structureCache, this.decoratorCache, this.structureSeeds);
+				timeMachine.buildStructureSeeds(pillarSeed, this.structureCache, this.populationCache, this.structureSeeds);
 			});
 
 			if(this.structureSeeds.size() > 0) {
-				LOG.warn("Finished search with " + this.structureSeeds.size() + (this.structureSeeds.size() == 1 ? " seed." : " seeds."));
+				Log.warn("Finished search with " + this.structureSeeds.size() + (this.structureSeeds.size() == 1 ? " seed." : " seeds."));
 			} else {
 				Log.error("Finished search with no seeds.");
 			}
 
 			this.structureCache.clear();
-			this.onDecoratorData(null);
+			this.onPopulationData(null);
 			this.onBiomeData(null);
 		} else if(this.structureSeeds != null && structureData != null) {
 			this.structureSeeds.removeIf(structureSeed -> {
@@ -188,7 +188,7 @@ public class SeedCracker implements ModInitializer {
 			Log.warn("Looking for world seeds with " + this.biomeCache.size() + " biomes.");
 
 			for(int i = 0; i < this.structureSeeds.size(); i++) {
-				SeedCracker.LOG.warn("Progress " + (i * 100.0f) / this.structureSeeds.size() + "%...");
+				Log.warn("Progress " + (i * 100.0f) / this.structureSeeds.size() + "%...");
 
 				long structureSeed = this.structureSeeds.get(i);
 
