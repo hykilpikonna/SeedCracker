@@ -9,7 +9,7 @@ import net.minecraft.world.gen.decorator.Decorator;
 
 import java.util.List;
 
-public class DungeonData extends DecoratorData {
+public class DungeonData extends PopulationData {
 
     public static LCG REVERSE_SKIP = Rand.JAVA_LCG.combine(-1);
     public static LCG Y_START_SKIP = Rand.JAVA_LCG.combine(2);
@@ -28,26 +28,33 @@ public class DungeonData extends DecoratorData {
     }
 
     @Override
-    public boolean testDecorator(Rand rand) {
+    public boolean testDecorator(long decoratorSeed) {
         if(this.starts.isEmpty())return true;
 
         //TODO: This currently only supports 1 dungeon per chunk.
         BlockPos start = this.starts.get(0);
 
+        long currentSeed = decoratorSeed;
+        boolean valid = false;
+
         for(int i = 0; i < 8; i++) {
-            int x = rand.nextInt(16);
-            int z = rand.nextInt(16);
-            int y = rand.nextInt(256);
+            currentSeed = i == 0 ? Y_START_SKIP.nextSeed(currentSeed) : Y_SKIP.nextSeed(currentSeed);
 
-            if(y == start.getY() && x == start.getX() && z == start.getZ()) {
-                return true;
+            if(currentSeed >> 40 == start.getY()) {
+                valid = true;
+                break;
             }
-
-            rand.nextInt(2);
-            rand.nextInt(2);
         }
 
-        return false;
+        if(!valid)return false;
+
+        int x = (int)(REVERSE_SKIP.nextSeed(currentSeed) >> 44);
+        if(x != start.getX())return false;
+
+        int z = (int)(Rand.JAVA_LCG.nextSeed(currentSeed) >> 44);
+        if(z != start.getZ())return false;
+
+        return true;
     }
 
 }

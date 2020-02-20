@@ -1,8 +1,6 @@
 package kaptainwutax.seedcracker.finder;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
@@ -42,11 +40,8 @@ public class FinderQueue {
         });
     }
 
-    public void renderFinders(MatrixStack matrixStack) {
+    public void renderFinders() {
         if(this.renderType == RenderType.OFF)return;
-
-        RenderSystem.pushMatrix();
-        RenderSystem.multMatrix(matrixStack.peek().getModel());
 
         GlStateManager.disableTexture();
 
@@ -61,7 +56,11 @@ public class FinderQueue {
             }
         });
 
-        RenderSystem.popMatrix();
+        GlStateManager.enableTexture();
+
+        if(this.renderType == RenderType.XRAY) {
+            GlStateManager.enableDepthTest();
+        }
     }
 
     public void clear() {

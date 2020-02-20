@@ -9,7 +9,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
@@ -29,11 +28,6 @@ public class BiomeFinder extends Finder {
             for(int z = 0; z < 16; z++) {
                 BlockPos blockPos = this.chunkPos.getCenterBlockPos().add(x, 0, z);
                 Biome biome = this.world.getBiome(blockPos);
-
-                //TODO: Fix this multi-threading issue.
-                if(biome == Biomes.THE_VOID) {
-                    continue;
-                }
 
                 if(SeedCracker.get().onBiomeData(new BiomeData(blockPos.getX(), blockPos.getZ(), biome))) {
                     blockPos = this.world.getTopPosition(Heightmap.Type.WORLD_SURFACE, blockPos).down();

@@ -10,7 +10,7 @@ import net.minecraft.world.gen.decorator.Decorator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EmeraldOreData extends DecoratorData {
+public class EmeraldOreData extends PopulationData {
 
     public static final LCG[] SKIP = {
             Rand.JAVA_LCG.combine(0),
@@ -30,18 +30,19 @@ public class EmeraldOreData extends DecoratorData {
     }
 
     @Override
-    public boolean testDecorator(Rand rand) {
+    public boolean testDecorator(long decoratorSeed) {
         if(this.starts.isEmpty())return true;
 
         //TODO: This currently only supports 1 emerald per chunk.
         BlockPos start = this.starts.get(0);
 
+        Rand rand = new Rand(decoratorSeed, false);
         int b = rand.nextInt(6);
 
         for(int i = 0; i < b + 3; i++) {
             int x = rand.nextInt(16);
-            int z = rand.nextInt(16);
             int y = rand.nextInt(28) + 4;
+            int z = rand.nextInt(16);
 
             if(y == start.getY() && x == start.getX() && z == start.getZ()) {
                 return true;

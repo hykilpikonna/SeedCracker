@@ -18,9 +18,4 @@ public class Cube extends Cuboid {
         super(pos, new Vec3i(1, 1, 1), color);
     }
 
-    @Override
-    public BlockPos getPos() {
-        return this.start;
-    }
-
 }
