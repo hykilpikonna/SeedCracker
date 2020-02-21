@@ -1,6 +1,7 @@
 package kaptainwutax.seedcracker;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import kaptainwutax.seedcracker.cracker.*;
 import kaptainwutax.seedcracker.cracker.population.PopulationData;
 import kaptainwutax.seedcracker.finder.FinderQueue;
@@ -112,7 +113,7 @@ public class SeedCracker implements ModInitializer {
 			this.pillarSeeds = pillarData.getPillarSeeds();
 
 			if(this.pillarSeeds.size() > 0) {
-				Log.warn("Finished search with " + this.pillarSeeds + (this.pillarSeeds.size() == 1 ? " seed." : " seeds."));
+				Log.warn("Finished search with " + this.pillarSeeds);
 			} else {
 				Log.error("Finished search with no seeds.");
 			}
@@ -130,9 +131,12 @@ public class SeedCracker implements ModInitializer {
 		if(structureData != null && !this.structureCache.contains(structureData)) {
 			this.structureCache.add(structureData);
 			added = true;
+
+			Log.warn("Structure added: " + structureData);
+			System.out.println(new Gson().toJson(structureCache));
 		}
 
-		if(this.structureSeeds == null && this.pillarSeeds != null && this.structureCache.size() + this.populationCache.size() >= 5) {
+		if(this.structureSeeds == null && this.pillarSeeds != null && this.structureCache.size() + this.populationCache.size() >= 6) {
 			this.structureSeeds = new ArrayList<>();
 			Log.warn("Looking for structure seeds with " + this.structureCache.size() + " structure features.");
 			Log.warn("Looking for structure seeds with " + this.populationCache.size() + " population features.");
@@ -142,13 +146,13 @@ public class SeedCracker implements ModInitializer {
 			});
 
 			if(this.structureSeeds.size() > 0) {
-				Log.warn("Finished search with " + this.structureSeeds.size() + (this.structureSeeds.size() == 1 ? " seed." : " seeds."));
+				Log.warn("Finished search with " + this.structureSeeds);
 			} else {
 				Log.error("Finished search with no seeds.");
 			}
 
-			this.structureCache.clear();
-			this.onPopulationData(null);
+			//this.structureCache.clear();
+			//this.onPopulationData(null);
 			this.onBiomeData(null);
 		} else if(this.structureSeeds != null && structureData != null) {
 			this.structureSeeds.removeIf(structureSeed -> {
@@ -181,6 +185,9 @@ public class SeedCracker implements ModInitializer {
 		if(biomeData != null && !this.biomeCache.contains(biomeData)) {
 			this.biomeCache.add(biomeData);
 			added = true;
+
+			Log.warn("Biome added: " + biomeData);
+			System.out.println(new Gson().toJson(biomeCache));
 		}
 
 		if(this.worldSeeds == null && this.structureSeeds != null && this.biomeCache.size() >= 5) {
